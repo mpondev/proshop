@@ -13,8 +13,6 @@ import {
 import axios from 'axios';
 import Rating from '../components/Rating';
 
-const BASE_URL = 'http://localhost:8000';
-
 function ProductScreen() {
   const [product, setProduct] = useState({});
 
@@ -22,7 +20,7 @@ function ProductScreen() {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const { data } = await axios.get(`${BASE_URL}/api/products/${productId}`);
+      const { data } = await axios.get(`/api/products/${productId}`);
       setProduct(data);
     };
 
