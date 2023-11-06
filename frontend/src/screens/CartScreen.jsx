@@ -20,11 +20,12 @@ function CartScreen() {
   const cart = useSelector(state => state.cart);
   const { cartItems } = cart;
 
-  const addToCartHandler = async (product, qty) => {
+  // No need for an async function as we are not awaiting the resolution of a Promise
+  const addToCartHandler = (product, qty) => {
     dispatch(addToCart({ ...product, qty }));
   };
 
-  const removeFromCartHandler = async id => {
+  const removeFromCartHandler = id => {
     dispatch(removeFromCart(id));
   };
 

@@ -17,7 +17,7 @@ function PaymentScreen() {
 
   useEffect(() => {
     if (!shippingAddress) {
-      navigate('shipping');
+      navigate('/shipping');
     }
   }, [shippingAddress, navigate]);
 
