@@ -14,7 +14,7 @@ function FormContainer({ children }) {
 }
 
 FormContainer.propTypes = {
-  children: PropTypes.object,
+  children: PropTypes.array,
 };
 
 export default FormContainer;
