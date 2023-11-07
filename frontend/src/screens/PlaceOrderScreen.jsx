@@ -39,7 +39,6 @@ function PlaceOrderScreen() {
       navigate(`/order/${res._id}`);
     } catch (err) {
       toast.error(err);
-      console.log(err);
     }
   };
 
