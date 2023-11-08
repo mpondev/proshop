@@ -1,14 +1,6 @@
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  Image,
-  ListGroup,
-  Row,
-} from 'react-bootstrap';
+import { Button, Card, Col, Image, ListGroup, Row } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
@@ -217,7 +209,8 @@ function OrderScreen() {
                     <Loader />
                   ) : (
                     <div>
-                      {/* <Button
+                      {/* // Button to mark order as paid (without PayPal)
+                      <Button
                         onClick={onApproveTest}
                         style={{ marginBottom: '10px' }}
                       >
