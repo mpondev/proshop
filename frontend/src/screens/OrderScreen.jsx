@@ -19,6 +19,7 @@ import {
   usePayOrderMutation,
   useGetPayPalClientIdQuery,
 } from '../slices/ordersApiSlice.js';
+import { func } from 'prop-types';
 
 function OrderScreen() {
   const { id: orderId } = useParams();
@@ -61,6 +62,44 @@ function OrderScreen() {
       }
     }
   }, [errorPayPal, loadingPayPal, order, paypal, paypalDispatch]);
+
+  function onApprove(data, actions) {
+    return actions.order.capture().then(async function (details) {
+      try {
+        await payOrder({ orderId, details });
+        refetch();
+        toast.success('Payment successful');
+      } catch (err) {
+        toast.error(err?.data?.message || err.message);
+      }
+    });
+  }
+
+  async function onApproveTest() {
+    await payOrder({ orderId, details: { payer: {} } });
+    refetch();
+    toast.success('Payment successful');
+  }
+
+  function onError(err) {
+    toast.error(err.message);
+  }
+
+  function createOrder(data, actions) {
+    return actions.order
+      .create({
+        purchase_units: [
+          {
+            amount: {
+              value: order.totalPrice,
+            },
+          },
+        ],
+      })
+      .then(orderId => {
+        return orderId;
+      });
+  }
 
   return isLoading ? (
     <Loader />
@@ -158,7 +197,30 @@ function OrderScreen() {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              {/* PAY ORDER PLACEHOLDER */}
+              {!order.isPaid && (
+                <ListGroup.Item>
+                  {loadingPay && <Loader />}{' '}
+                  {isPending ? (
+                    <Loader />
+                  ) : (
+                    <div>
+                      {/* <Button
+                        onClick={onApproveTest}
+                        style={{ marginBottom: '10px' }}
+                      >
+                        Test Pay Order
+                      </Button> */}
+                      <div>
+                        <PayPalButtons
+                          createOrder={createOrder}
+                          onApprove={onApprove}
+                          onError={onError}
+                        ></PayPalButtons>
+                      </div>
+                    </div>
+                  )}
+                </ListGroup.Item>
+              )}
               {/* MARK AS DELIVERED PLACEHOLDER */}
             </ListGroup>
           </Card>
