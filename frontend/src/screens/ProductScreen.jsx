@@ -7,16 +7,15 @@ import {
   Form,
   Image,
   ListGroup,
-  ListGroupItem,
   Row,
 } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 
-import { useGetProductDetailsQuery } from '../slices/productsApiSlice';
+import { useGetProductDetailsQuery } from '../slices/productsApiSlice.js';
+import { addToCart } from '../slices/cartSlice.js';
 import Rating from '../components/Rating';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
-import { addToCart } from '../slices/cartSlice';
 
 function ProductScreen() {
   const { id: productId } = useParams();
@@ -52,35 +51,37 @@ function ProductScreen() {
       ) : (
         <Row>
           <Col md={5}>
-            <Image src={product.image} alt={product.name} fluid />
+            <Image src={product.image} alt={product.name} />
           </Col>
           <Col md={4}>
             <ListGroup variant="flush">
-              <ListGroupItem>
+              <ListGroup.Item>
                 <h3>{product.name}</h3>
-              </ListGroupItem>
-              <ListGroupItem>
+              </ListGroup.Item>
+              <ListGroup.Item>
                 <Rating
                   value={product.rating}
                   text={`${product.numReviews} reviews`}
                 />
-              </ListGroupItem>
-              <ListGroupItem>Price: ${product.price}</ListGroupItem>
-              <ListGroupItem>Description: {product.description}</ListGroupItem>
+              </ListGroup.Item>
+              <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
+              <ListGroup.Item>
+                Description: {product.description}
+              </ListGroup.Item>
             </ListGroup>
           </Col>
           <Col md={3}>
             <Card>
               <ListGroup variant="flush">
-                <ListGroupItem>
+                <ListGroup.Item>
                   <Row>
                     <Col>Price:</Col>
                     <Col>
                       <strong>${product.price}</strong>
                     </Col>
                   </Row>
-                </ListGroupItem>
-                <ListGroupItem>
+                </ListGroup.Item>
+                <ListGroup.Item>
                   <Row>
                     <Col>Status:</Col>
                     <Col>
@@ -90,7 +91,7 @@ function ProductScreen() {
                       </strong>
                     </Col>
                   </Row>
-                </ListGroupItem>
+                </ListGroup.Item>
 
                 {product.countInStock > 0 && (
                   <ListGroup.Item>
@@ -113,7 +114,7 @@ function ProductScreen() {
                   </ListGroup.Item>
                 )}
 
-                <ListGroupItem>
+                <ListGroup.Item>
                   <Button
                     className="btn-block"
                     type="button"
@@ -122,7 +123,7 @@ function ProductScreen() {
                   >
                     Add to Cart
                   </Button>
-                </ListGroupItem>
+                </ListGroup.Item>
               </ListGroup>
             </Card>
           </Col>

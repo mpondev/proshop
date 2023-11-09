@@ -8,7 +8,8 @@ import FormContainer from '../../components/FormContainer';
 import {
   useGetProductDetailsQuery,
   useUpdateProductMutation,
-} from '../../slices/productsApiSlice';
+  useUploadProductImageMutation,
+} from '../../slices/productsApiSlice.js';
 
 function ProductEditScreen() {
   const { id: productId } = useParams();
@@ -30,6 +31,9 @@ function ProductEditScreen() {
 
   const [updateProduct, { isLoading: loadingUpdate }] =
     useUpdateProductMutation();
+
+  const [uploadProductImage, { isLoading: loadingUpload }] =
+    useUploadProductImageMutation();
 
   const navigate = useNavigate();
 
@@ -64,6 +68,18 @@ function ProductEditScreen() {
     } else {
       toast.success('Product updated');
       navigate('/admin/productlist');
+    }
+  };
+
+  const uploadFileHandler = async evt => {
+    const formData = new FormData();
+    formData.append('image', evt.target.files[0]);
+    try {
+      const res = await uploadProductImage(formData).unwrap();
+      toast.success(res.message);
+      setImage(res.image);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
     }
   };
 
@@ -102,7 +118,20 @@ function ProductEditScreen() {
               ></Form.Control>
             </Form.Group>
 
-            {/* IMAGE INPUT PLACEHOLDER */}
+            <Form.Group controlId="image" className="my-2">
+              <Form.Label>Image</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter image url"
+                value={image}
+                onChange={evt => setImage}
+              ></Form.Control>
+              <Form.Control
+                type="file"
+                label="Choose file"
+                onChange={uploadFileHandler}
+              ></Form.Control>
+            </Form.Group>
 
             <Form.Group controlId="brand" className="my-2">
               <Form.Label>Brand</Form.Label>
