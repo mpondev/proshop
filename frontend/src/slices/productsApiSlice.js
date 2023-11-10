@@ -44,11 +44,20 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         method: 'DELETE',
       }),
     }),
+    creteReview: builder.mutation({
+      query: data => ({
+        url: `${PRODUCTS_URL}/${data.productId}/reviews`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Product'],
+    }),
   }),
 });
 
 export const {
   useCreateProductMutation,
+  useCreteReviewMutation,
   useDeleteProductMutation,
   useGetProductsQuery,
   useGetProductDetailsQuery,
