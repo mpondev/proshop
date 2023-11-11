@@ -3,9 +3,10 @@ import { Table, Form, Row, Col, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { FaTimes } from 'react-icons/fa';
+
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { FaTimes } from 'react-icons/fa';
 import { useProfileMutation } from '../slices/usersApiSlice.js';
 import { setCredentials } from '../slices/authSlice.js';
 import { useGetMyOrdersQuery } from '../slices/ordersApiSlice.js';
@@ -44,7 +45,7 @@ function ProfileScreen() {
           email,
           password,
         }).unwrap();
-        dispatch(setCredentials(res));
+        dispatch(setCredentials({ ...res }));
         toast.success('Profile updated successfully');
       } catch (err) {
         toast.error(err?.data?.message || err.error);
@@ -61,7 +62,7 @@ function ProfileScreen() {
           <Form.Group controlId="name" className="my-2">
             <Form.Label>Name</Form.Label>
             <Form.Control
-              type="name"
+              type="text"
               placeholder="Enter name"
               value={name}
               onChange={evt => setName(evt.target.value)}

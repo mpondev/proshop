@@ -70,11 +70,12 @@ function OrderScreen() {
     });
   }
 
-  async function onApproveTest() {
-    await payOrder({ orderId, details: { payer: {} } });
-    refetch();
-    toast.success('Payment successful');
-  }
+  // TESTING ONLY
+  // async function onApproveTest() {
+  //   await payOrder({ orderId, details: { payer: {} } });
+  //   refetch();
+  //   toast.success('Payment successful');
+  // }
 
   function onError(err) {
     toast.error(err.message);
@@ -109,7 +110,7 @@ function OrderScreen() {
   return isLoading ? (
     <Loader />
   ) : error ? (
-    <Message variant="danger" />
+    <Message variant="danger">{error.data.message}</Message>
   ) : (
     <>
       <h1>Order {order._id}</h1>
@@ -124,7 +125,7 @@ function OrderScreen() {
               </p>
               <p>
                 <strong>Email: </strong>
-                {order.user.email}
+                <a href={`mailto:${order.user.email}`}>{order.user.email}</a>
               </p>
               <p>
                 <strong>Address: </strong>
@@ -156,21 +157,34 @@ function OrderScreen() {
 
             <ListGroup.Item>
               <h2>Order Items</h2>
-              {order.orderItems.map((item, index) => (
-                <ListGroup.Item key={index}>
-                  <Row>
-                    <Col md={1}>
-                      <Image src={item.image} alt={item.name} fluid rounded />
-                    </Col>
-                    <Col>
-                      <Link to={`/product/${item.product}`}>{item.name}</Link>
-                    </Col>
-                    <Col md={4}>
-                      {item.qty} x ${item.price} = ${item.qty * item.price}
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
-              ))}
+              {order.orderItems.length === 0 ? (
+                <Message>Order is empty</Message>
+              ) : (
+                <ListGroup variant="flush">
+                  {order.orderItems.map((item, index) => (
+                    <ListGroup.Item key={index}>
+                      <Row>
+                        <Col md={1}>
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            fluid
+                            rounded
+                          />
+                        </Col>
+                        <Col>
+                          <Link to={`/product/${item.product}`}>
+                            {item.name}
+                          </Link>
+                        </Col>
+                        <Col md={4}>
+                          {item.qty} x ${item.price} = ${item.qty * item.price}
+                        </Col>
+                      </Row>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              )}
             </ListGroup.Item>
           </ListGroup>
         </Col>

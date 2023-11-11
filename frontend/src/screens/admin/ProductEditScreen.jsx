@@ -25,6 +25,7 @@ function ProductEditScreen() {
   const {
     data: product,
     isLoading,
+    refetch,
     error,
   } = useGetProductDetailsQuery(productId);
 
@@ -50,23 +51,22 @@ function ProductEditScreen() {
 
   const submitHandler = async evt => {
     evt.preventDefault();
-    const updatedProduct = {
-      productId,
-      name,
-      price,
-      image,
-      brand,
-      category,
-      countInStock,
-      description,
-    };
-
-    const result = await updateProduct(updatedProduct);
-    if (result.error) {
-      toast.error(result.error);
-    } else {
+    try {
+      await updateProduct({
+        productId,
+        name,
+        price,
+        image,
+        brand,
+        category,
+        countInStock,
+        description,
+      }).unwrap();
       toast.success('Product updated');
+      refetch();
       navigate('/admin/productlist');
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
     }
   };
 
@@ -123,7 +123,7 @@ function ProductEditScreen() {
                 type="text"
                 placeholder="Enter image url"
                 value={image}
-                onChange={evt => setImage}
+                onChange={evt => setImage(evt.target.value)}
               ></Form.Control>
               <Form.Control
                 type="file"
